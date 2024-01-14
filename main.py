@@ -10,9 +10,9 @@ import meshtastic.serial_interface
 import meshtastic.tcp_interface
 from pubsub import pub
 
-# vall-e
-from vall_e.utils.prompt_making import make_prompt
-from vall_e.utils.generation import SAMPLE_RATE, generate_audio, preload_models
+# VALL-E-X
+from vall_e_x.utils.prompt_making import make_prompt
+from vall_e_x.utils.generation import SAMPLE_RATE, generate_audio, preload_models
 from IPython.display import Audio
 
 

@@ -26,6 +26,6 @@ torchaudio
 torchvision
 translatepy
 unidecode
-vall-e @ git+https://github.com/Plachtaa/VALL-E-X.git@3faaf8ccadb154d63b38070caf518ce9309ea0f4
+vall-e-x @ git+https://github.com/paulperegud/VALL-E-X.git@b8abbe228ef2ac65e22b49422e1e8312e81119f0
 vocos
 wget
