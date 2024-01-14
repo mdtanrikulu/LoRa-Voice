@@ -38,15 +38,15 @@ def onReceive(packet, interface): # called when a packet arrives
         print('Received: From:', From, '-', Message)
         audio_array = generate_audio(Message)
         Audio(audio_array, rate=SAMPLE_RATE)
-    
+
 def main():
-    
-   
+
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="medium", help="Selects the model size for processing. Available options: 'tiny', 'base', 'small', 'medium', 'large'.",
                         choices=["tiny", "base", "small", "medium", "large"])
     parser.add_argument("--device", default="cpu", help="Specifies the computing device for CTranslate2 inference. Options: 'auto', 'cuda', 'cpu'.",
-                        choices=["auto", "cuda", "cpu"])                   
+                        choices=["auto", "cuda", "cpu"])
     parser.add_argument("--compute_type", default="int8", help="Determines the quantization type for computation. Choices include 'auto', 'int8', 'int8_float16', 'float16', 'int16', 'float32'.",
                         choices=["auto", "int8", "int8_floatt16", "float16", "int16", "float32"])
     parser.add_argument("--translation_lang", default='English',
@@ -59,16 +59,16 @@ def main():
                         help="Sets the microphone's energy level threshold for detection.", type=int)
     parser.add_argument("--record_timeout", default=2,
                         help="Determines the delay in seconds for real-time recording.", type=float)
-                        
-    parser.add_argument("--phrase_timeout", default=3,
-                        help="Specifies the duration in seconds of inactivity before considering it as the end of a phrase in transcription.", type=float) 
 
-                             
+    parser.add_argument("--phrase_timeout", default=3,
+                        help="Specifies the duration in seconds of inactivity before considering it as the end of a phrase in transcription.", type=float)
+
+
     if 'linux' in platform:
         parser.add_argument("--default_microphone", default='pulse',
                     help="Specifies the default microphone for SpeechRecognition. Use 'list' to see available microphones.", type=str)
     args = parser.parse_args()
-    
+
     # Timestamp for when the last recording was retrieved from the queue.
     phrase_time = None
     # Buffer for storing the raw audio bytes.
@@ -100,7 +100,7 @@ def main():
         if not mic_name or mic_name == 'list':
             print("Available microphone devices are: ")
             for index, name in enumerate(sr.Microphone.list_microphone_names()):
-                print(f"Microphone with name \"{name}\" found")   
+                print(f"Microphone with name \"{name}\" found")
             return
         else:
             # Selects the specified microphone by matching the provided name.
@@ -111,14 +111,14 @@ def main():
 
     else:
         source = sr.Microphone(sample_rate=16000)
-    
+
     if args.model == "large":
-        args.model = "large-v2"    
-    
+        args.model = "large-v2"
+
     model = args.model
     if args.model != "large-v2" and not args.non_english:
         model = model + ".en"
-    
+
     # todo implement local (offline) translation with this flag
     translation_lang = args.translation_lang
 
@@ -128,16 +128,16 @@ def main():
     else:
         compute_type = args.compute_type
     cpu_threads = args.threads
-    
+
     nltk.download('punkt')
     audio_model = WhisperModel(model, device = device, compute_type = compute_type , cpu_threads = cpu_threads)
-    
+
     record_timeout = args.record_timeout
     phrase_timeout = args.phrase_timeout
 
-    temp_file = NamedTemporaryFile().name 
+    temp_file = NamedTemporaryFile().name
     transcription = ['']
-    
+
     with source:
         recorder.adjust_for_ambient_noise(source)
 
@@ -196,7 +196,7 @@ def main():
                 else:
                     transcription[-1] = text
                 last_four_elements = transcription[-10:]
-                result = ''.join(last_four_elements)    
+                result = ''.join(last_four_elements)
                 sentences = sent_tokenize(result)
                 last_sentence = sentences.pop()
                 print("message:", last_sentence)
