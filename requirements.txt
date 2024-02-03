@@ -2,7 +2,7 @@ cn2an
 encodec
 eng_to_ipa
 faster-whisper
-gradio==3.41.2
+gradio==4.11.0
 inflect
 jieba
 langid
